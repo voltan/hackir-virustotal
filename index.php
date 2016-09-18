@@ -153,8 +153,78 @@ $pageInfo = array(
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="template-section-content">
-                    
+                <div class="template-section-content clearfix">
+                    <?php if (isset($_FILES["file"]["name"]) && !empty($_FILES["file"]["name"]) && isset($_POST["submit"])) { ?>
+                        <?php
+                        // Use class
+                        require_once __DIR__ . '/../VirustotalApiwrapper/Vendors/autoload.php';
+                        // Set api key
+                        $apiKey = 'your_api_key';
+                        // Upload file
+                        $target_dir = "upload/";
+                        $target_file = $target_dir . basename($_FILES["file"]["name"]);
+                        $uploadOk = 1;
+                        $fileType = pathinfo($target_file,PATHINFO_EXTENSION);
+                        // Check if file already exists
+                        if (file_exists($target_file)) {
+                            echo "Sorry, file already exists.";
+                            $uploadOk = 0;
+                        }
+                        // Check file size
+                        if ($_FILES["file"]["size"] > 50000000) {
+                            echo "Sorry, your file is too large.";
+                            $uploadOk = 0;
+                        }
+                        // Allow certain file formats
+                        if(!in_array($fileType, array('jpg', 'png', 'jpeg', 'gif'))) {
+                            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+                            $uploadOk = 0;
+                        }
+                        // Check if $uploadOk is set to 0 by an error
+                        if ($uploadOk == 0) {
+                            echo "Sorry, your file was not uploaded.";
+                            // if everything is ok, try to upload file
+                        } else {
+                            if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+                                try {
+                                    // Check file
+                                    $file = new VirusTotal\File($apiKey);
+                                    $resp = $file->scan($target_file);
+                                    // Show result
+                                    echo '<pre>';
+                                    print_r($resp);
+                                    echo '</pre>';
+                                } catch (Exception $e) {
+                                    // Show error
+                                    echo '<pre>';
+                                    print_r(strip_tags($e->getMessage()));
+                                    echo '</pre>';
+                                }
+                                // remove file
+                                unlink($target_file);
+                            } else {
+                                echo "Sorry, there was an error uploading your file.";
+                            }
+                        }
+                        ?>
+                    <?php } else { ?>
+                        <form action="" method="post" enctype="multipart/form-data">
+                            <div class="form-group clearfix" data-name="image">
+                                <label class="col-sm-3 control-label">بارگذاری فایل</label>
+                                <div class="col-sm-5 js-form-element">
+                                    <input name="file" type="file">
+                                    <div class="text-muted"></div>
+                                </div>
+                                <div class="col-sm-4 help-block"></div>
+                                <br />
+                            </div>
+                            <div class="form-group clearfix">
+                                <div class="col-sm-offset-3 col-sm-9">
+                                    <input type="submit" class="btn btn-primary" name="submit" value="بارگذاری فایل">
+                                </div>
+                            </div>
+                        </form>
+                    <?php } ?>
                 </div>
             </div>
         </div>
