@@ -1,0 +1,38 @@
+.template-navbar {
+    margin-bottom: 0;
+    border-radius: 0;
+
+}
+
+.template-header {
+    background-color: #2C353D;
+    padding: 15px;
+    color: #ffffff;
+}
+
+.template-header h1 {
+    padding: 0;
+    margin: 0;
+}
+
+.template-section {
+    background-color: #EBEBEB;
+    background-image: url('../image/diagonal-bold-dark.png');
+    background-repeat: repeat;
+    background-position: center;
+    padding: 15px;
+}
+
+.template-section-content {
+    background-color: #ffffff;
+    padding: 15px;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    min-height: 500px;
+}
+
+.template-footer {
+    background-color: #2C353D;
+    padding: 15px;
+    color: #ffffff;
+}
