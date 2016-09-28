@@ -156,13 +156,14 @@ $pageInfo = array(
                 <div class="template-section-content clearfix">
                     <?php if (isset($_FILES["file"]["name"]) && !empty($_FILES["file"]["name"]) && isset($_POST["submit"])) { ?>
                         <?php
-                        // Use class
-                        //require_once __DIR__ . '/../VirustotalApiwrapper/Vendors/autoload.php';
-                        // Set api key
+                        // Setting
                         $apiKey = '19f2ab7ca76132a33559efbcca6c20d170520e4685ccd27e624a5a1f7dd596d2';
-                        // Upload file
-                        $target_dir = "/home/nanoin/public_html/antivirus/upload/";
-                        $target_file = $target_dir . basename($_FILES["file"]["name"]);
+                        $uploadDir = "/home/nanoin/public_html/antivirus/upload/";
+                        $maxUpdloadSize = 50000000;
+                        $mimType = array('jpg', 'png', 'jpeg', 'gif', 'exe', 'pdf', 'doc', 'docx');
+
+                        // Set file
+                        $target_file = $uploadDir . basename($_FILES["file"]["name"]);
                         $uploadOk = 1;
                         $fileType = pathinfo($target_file,PATHINFO_EXTENSION);
                         // Check if file already exists
@@ -171,13 +172,13 @@ $pageInfo = array(
                             $uploadOk = 0;
                         }
                         // Check file size
-                        if ($_FILES["file"]["size"] > 50000000) {
+                        if ($_FILES["file"]["size"] > $maxUpdloadSize) {
                             echo "Sorry, your file is too large.";
                             $uploadOk = 0;
                         }
                         // Allow certain file formats
-                        if(!in_array($fileType, array('jpg', 'png', 'jpeg', 'gif', 'exe', 'pdf', 'doc', 'docx'))) {
-                            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+                        if(!in_array($fileType, $mimType)) {
+                            echo "Sorry, your file tpe is not allowed.";
                             $uploadOk = 0;
                         }
                         // Check if $uploadOk is set to 0 by an error
@@ -257,13 +258,7 @@ $pageInfo = array(
                                             echo "\nfile queued OK, you can use this scan_id to check the scan progress:\n".$api_reply_array['scan_id'];
                                             echo "\nor just keep checking using the file hash, but it will only report once it is completed (no 'PENDING/QUEUED' reply will be given).";
                                         }
-
                                     }
-
-                                    // Show result
-                                    //echo '<pre>';
-                                    //print_r($resp);
-                                    //echo '</pre>';
                                 } catch (Exception $e) {
                                     // Show error
                                     echo '<pre>';
