@@ -209,8 +209,6 @@ $pageInfo = array(
                                     // convert the json reply to an array of variables
                                     $api_reply_array = json_decode($api_reply, true);
 
-
-
                                     // your resource is queued for analysis
                                     if($api_reply_array['response_code']==-2){
                                         echo $api_reply_array['verbose_msg'];
