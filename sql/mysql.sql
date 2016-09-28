@@ -1,0 +1,21 @@
+CREATE TABLE `log` (
+  `id`           INT(10) UNSIGNED    NOT NULL AUTO_INCREMENT,
+  `ip`           CHAR(15)            NOT NULL DEFAULT '',
+  `first_name`   VARCHAR(255)        NOT NULL DEFAULT '',
+  `last_name`    VARCHAR(255)        NOT NULL DEFAULT '',
+  `email`        VARCHAR(64)         NOT NULL DEFAULT '',
+  `mobile`       VARCHAR(16)         NOT NULL DEFAULT '',
+  `file_name`    VARCHAR(255)        NOT NULL DEFAULT '',
+  `file_size`    VARCHAR(32)         NOT NULL DEFAULT '',
+  `file_hash`    VARCHAR(255)        NOT NULL DEFAULT '',
+  `file_status`  TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+  `time_request` INT(10) UNSIGNED    NOT NULL DEFAULT '0',
+  `time_result`  INT(10) UNSIGNED    NOT NULL DEFAULT '0',
+  `status`       TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+  `code`         VARCHAR(255)        NOT NULL DEFAULT '',
+  `result`       TEXT,
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`),
+  KEY `time_request` (`time_request`),
+  KEY `time_result` (`time_result`)
+);
