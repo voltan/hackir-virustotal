@@ -1,4 +1,11 @@
 <?php
+
+require_once 'autoloader.php';
+
+use Hack\Utility\Database;
+use Hack\Utility\Mail;
+use Hack\Utility\Tools;
+
 $pageInfo = array(
     'title' => 'هک - امنیت اطلاعات - حریم خصوصی',
     'keywords' => 'هک - امنیت اطلاعات - حریم خصوصی',
@@ -158,9 +165,35 @@ $pageInfo = array(
                         <?php
                         // Setting
                         $apiKey = '19f2ab7ca76132a33559efbcca6c20d170520e4685ccd27e624a5a1f7dd596d2';
-                        $uploadDir = "/home/nanoin/public_html/antivirus/upload/";
+                        //$uploadDir = "/home/nanoin/public_html/antivirus/upload/";
+                        $uploadDir = "/var/www/html/local/projects/hackir-virustotal/upload/";
                         $maxUpdloadSize = 50000000;
-                        $mimType = array('jpg', 'png', 'jpeg', 'gif', 'exe', 'pdf', 'doc', 'docx');
+                        $mimeType = Tools::MimeType();
+                        
+                        $fields = array(
+                            'ip' => $_SERVER['REMOTE_ADDR'],
+                            'first_name' => '',
+                            'last_name' => '',
+                            'email' => '',
+                            'mobile' => '',
+                            'file_name' => '',
+                            'file_size' => '',
+                            'file_hash' => '',
+                            'file_status' => 1,
+                            'time_request' => time(),
+                            'time_result' => '',
+                            'status' => '',
+                            'code' => '',
+                            'result' => '',
+                        );
+
+                        // Set
+                        $fields['first_name'] = $_POST['first_name'];
+                        $fields['last_name'] = $_POST['last_name'];
+                        $fields['email'] = $_POST['email'];
+                        $fields['mobile'] = $_POST['mobile'];
+                        $fields['file_name'] = $_FILES["file"]["name"];
+                        $fields['file_size'] = $_FILES["file"]["size"];
 
                         // Set file
                         $target_file = $uploadDir . basename($_FILES["file"]["name"]);
@@ -177,7 +210,7 @@ $pageInfo = array(
                             $uploadOk = 0;
                         }
                         // Allow certain file formats
-                        if(!in_array($fileType, $mimType)) {
+                        if(!in_array($fileType, $mimeType)) {
                             echo "Sorry, your file tpe is not allowed.";
                             $uploadOk = 0;
                         }
@@ -188,17 +221,15 @@ $pageInfo = array(
                         } else {
                             if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
                                 try {
-                                    /*
-                                    PHP code for scanning files for viruses using virustotal.com API
-                                    File coded by Adrian at www.TheWebHelp.com
-                                    */
+                                    // PHP code for scanning files for viruses using virustotal.com API
+                                    // File coded by Adrian at www.TheWebHelp.com
                                     header("Content-Type: text/plain");
 
                                     // get the file size in mb, we will use it to know at what url to send for scanning (it's a different URL for over 30MB)
                                     $file_size_mb = filesize($target_file)/1024/1024;
 
                                     // calculate a hash of this file, we will use it as an unique ID when quering about this file
-                                    $file_hash = hash('sha256', file_get_contents($target_file));
+                                    $fields['file_hash'] = $file_hash = hash('sha256', file_get_contents($target_file));
 
                                     // [PART 1] hecking if a report for this file already exists (check by providing the file hash (md5/sha1/sha256)
                                     // or by providing a scan_id that you receive when posting a new file for scanning
@@ -259,6 +290,9 @@ $pageInfo = array(
                                             echo "\nor just keep checking using the file hash, but it will only report once it is completed (no 'PENDING/QUEUED' reply will be given).";
                                         }
                                     }
+
+                                    // Save information
+                                    Database::InsertLog($fields);
                                 } catch (Exception $e) {
                                     // Show error
                                     echo '<pre>';
@@ -273,18 +307,50 @@ $pageInfo = array(
                         }
                         ?>
                     <?php } else { ?>
-                        <form action="" method="post" enctype="multipart/form-data">
-                            <div class="form-group clearfix" data-name="image">
-                                <label class="col-sm-3 control-label">بارگذاری فایل</label>
-                                <div class="col-sm-5 js-form-element">
+                        <form class="well" action="" method="post" enctype="multipart/form-data">
+                            <div class="form-group clearfix" data-name="first_name">
+                                <label class="col-md-3 control-label">نام</label>
+                                <div class="col-md-7 js-form-element">
+                                    <input class="col-md-12" name="first_name" type="text" required>
+                                    <div class="text-muted"></div>
+                                </div>
+                                <div class="col-md-2 help-block"></div>
+                            </div>
+                            <div class="form-group clearfix" data-name="last_name">
+                                <label class="col-md-3 control-label">نام خانوادگی</label>
+                                <div class="col-md-7 js-form-element">
+                                    <input class="col-md-12" name="last_name" type="text" required>
+                                    <div class="text-muted"></div>
+                                </div>
+                                <div class="col-md-2 help-block"></div>
+                            </div>
+                            <div class="form-group clearfix" data-name="email">
+                                <label class="col-md-3 control-label">آدرس ایمیل</label>
+                                <div class="col-md-7 js-form-element">
+                                    <input class="col-md-12" name="email" type="email" required>
+                                    <div class="text-muted"></div>
+                                </div>
+                                <div class="col-md-2 help-block"></div>
+                            </div>
+                            <div class="form-group clearfix" data-name="mobile">
+                                <label class="col-md-3 control-label">موبایل</label>
+                                <div class="col-md-7 js-form-element">
+                                    <input class="col-md-12" name="mobile" type="text" required>
+                                    <div class="text-muted"></div>
+                                </div>
+                                <div class="col-md-2 help-block"></div>
+                            </div>
+                            <div class="form-group clearfix" data-name="file">
+                                <label class="col-md-3 control-label">بارگذاری فایل</label>
+                                <div class="col-md-7 js-form-element">
                                     <input name="file" type="file">
                                     <div class="text-muted"></div>
                                 </div>
-                                <div class="col-sm-4 help-block"></div>
+                                <div class="col-md-2 help-block"></div>
                                 <br />
                             </div>
                             <div class="form-group clearfix">
-                                <div class="col-sm-offset-3 col-sm-9">
+                                <div class="col-md-offset-3 col-md-9">
                                     <input type="submit" class="btn btn-primary" name="submit" value="بارگذاری فایل">
                                 </div>
                             </div>
