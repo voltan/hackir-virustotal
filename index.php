@@ -161,15 +161,36 @@ $pageInfo = array(
         <div class="row">
             <div class="col-md-12">
                 <div class="template-section-content clearfix">
-                    <?php if (isset($_FILES["file"]["name"]) && !empty($_FILES["file"]["name"]) && isset($_POST["submit"])) { ?>
-                        <?php
+                    <?php switch ($_GET['type']) {
+                        case 'result':
+                            $fields = array(
+                                'resource' => Tools::CleanVars($_GET, 'scan_id', '', 'string'),
+                            );
+                            $url = 'https://www.virustotal.com/vtapi/v2/file/report';
+                            foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
+                            rtrim($fields_string, '&');
+                            $ch = curl_init();
+                            curl_setopt($ch,CURLOPT_URL, $url);
+                            curl_setopt($ch,CURLOPT_POST, count($fields));
+                            curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+                            $result = curl_exec($ch);
+                            curl_close($ch);
+                            echo '<pre>';
+                            print_r($result);
+                            echo '</pre>';
+                            break;
+
+                        default:
+                        case 'send':
+                    if (isset($_FILES["file"]["name"]) && !empty($_FILES["file"]["name"]) && isset($_POST["submit"])) {
+
                         // Setting
                         $apiKey = '19f2ab7ca76132a33559efbcca6c20d170520e4685ccd27e624a5a1f7dd596d2';
-                        //$uploadDir = "/home/nanoin/public_html/antivirus/upload/";
-                        $uploadDir = "/var/www/html/local/projects/hackir-virustotal/upload/";
+                        $uploadDir = "/home/nanoin/public_html/antivirus/upload/";
+                        //$uploadDir = "/var/www/html/local/projects/hackir-virustotal/upload/";
                         $maxUpdloadSize = 50000000;
                         $mimeType = Tools::MimeType();
-                        
+
                         $fields = array(
                             'ip' => $_SERVER['REMOTE_ADDR'],
                             'first_name' => '',
@@ -249,8 +270,14 @@ $pageInfo = array(
                                     // reply is OK (it contains an antivirus report)
                                     // use the variables from $api_reply_array to process the antivirus data
                                     if($api_reply_array['response_code']==1){
+                                        $fields['result'] = json_encode($api_reply_array);
+                                        // Save information
+                                        Database::InsertLog($fields);
+
                                         echo "\nWe got an antivirus report, there were ".$api_reply_array['positives']." positives found. Here is the full data: \n\n";
+                                        echo '<pre>';
                                         print_r($api_reply_array);
+                                        echo '</pre>';
                                         exit;
                                     }
 
@@ -286,11 +313,12 @@ $pageInfo = array(
                                         $api_reply_array = json_decode($api_reply, true);
 
                                         if($api_reply_array['response_code']==1){
-                                            echo "\nfile queued OK, you can use this scan_id to check the scan progress:\n".$api_reply_array['scan_id'];
-                                            echo "\nor just keep checking using the file hash, but it will only report once it is completed (no 'PENDING/QUEUED' reply will be given).";
+                                            //echo "\nfile queued OK, you can use this scan_id to check the scan progress:\n".$api_reply_array['scan_id'];
+                                            //echo "\nor just keep checking using the file hash, but it will only report once it is completed (no 'PENDING/QUEUED' reply will be given).";
+                                            $fields['code'] = $api_reply_array['scan_id'];
+                                            echo 'Please check on this link to see result : <a href="http://netswebs.com/antivirus/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '">http://netswebs.com/antivirus/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '</a>';
                                         }
                                     }
-
                                     // Save information
                                     Database::InsertLog($fields);
                                 } catch (Exception $e) {
@@ -305,8 +333,7 @@ $pageInfo = array(
                                 echo "Sorry, there was an error uploading your file.";
                             }
                         }
-                        ?>
-                    <?php } else { ?>
+                    } else { ?>
                         <form class="well" action="" method="post" enctype="multipart/form-data">
                             <div class="form-group clearfix" data-name="first_name">
                                 <label class="col-md-3 control-label">نام</label>
@@ -355,7 +382,10 @@ $pageInfo = array(
                                 </div>
                             </div>
                         </form>
-                    <?php } ?>
+                    <?php }
+                            break;
+                    } ?>
+
                 </div>
             </div>
         </div>

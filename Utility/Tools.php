@@ -48,7 +48,7 @@ class Tools
         $output = array();
         $list = self::MimeTypeList();
         foreach ($list as $key => $value) {
-            $output[$key] = $key;
+            $output[] = str_replace('.', '', $key);
         }
         return $output;
     }
