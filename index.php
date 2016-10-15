@@ -3,7 +3,6 @@
 require_once 'autoloader.php';
 
 use Hack\Utility\Database;
-use Hack\Utility\Mail;
 use Hack\Utility\Tools;
 
 $pageInfo = array(
@@ -81,7 +80,8 @@ $maxUpdloadSize = 50000000;
     <title><?php echo $pageInfo['title']; ?></title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+    <!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 
     <meta name="keywords" content="<?php echo $pageInfo['keywords']; ?>">
     <meta name="description" content="<?php echo $pageInfo['description']; ?>">
@@ -119,32 +119,46 @@ $maxUpdloadSize = 50000000;
 
     <script type="text/javascript" src="./vendor/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="./vendor/bootstrap/js/bootstrap.min.js"></script>
-    <!--[if lt IE 9]><script type="text/javascript" src="./vendor/js/html5shiv.min.js"></script><![endif]-->
-    <!--[if lt IE 9]><script type="text/javascript" src="./vendor/js/respond.min.js"></script><![endif]-->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="./vendor/js/html5shiv.min.js"></script><![endif]-->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="./vendor/js/respond.min.js"></script><![endif]-->
 
 </head>
 <body id="template-body" class="template-body-content template-locale-fa">
 <nav class="template-navbar navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#template-navbar-main" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#template-navbar-main" aria-expanded="false">
                 <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="<?php echo $pageInfo['brand_url']; ?>"><?php echo $pageInfo['brand_name']; ?></a>
+            <a class="navbar-brand"
+               href="<?php echo $pageInfo['brand_url']; ?>"><?php echo $pageInfo['brand_name']; ?></a>
         </div>
         <div class="collapse navbar-collapse" id="template-navbar-main">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="<?php echo $pageInfo['nav'][1]['url']; ?>"><?php echo $pageInfo['nav'][1]['title']; ?></a></li>
-                <li><a href="<?php echo $pageInfo['nav'][1]['url']; ?>"><?php echo $pageInfo['nav'][1]['title']; ?></a></li>
-                <li><a href="<?php echo $pageInfo['nav'][2]['url']; ?>"><?php echo $pageInfo['nav'][2]['title']; ?></a></li>
-                <li><a href="<?php echo $pageInfo['nav'][3]['url']; ?>"><?php echo $pageInfo['nav'][3]['title']; ?></a></li>
-                <li><a href="<?php echo $pageInfo['nav'][4]['url']; ?>"><?php echo $pageInfo['nav'][4]['title']; ?></a></li>
-                <li><a href="<?php echo $pageInfo['nav'][5]['url']; ?>"><?php echo $pageInfo['nav'][5]['title']; ?></a></li>
-                <li><a href="<?php echo $pageInfo['nav'][6]['url']; ?>"><?php echo $pageInfo['nav'][6]['title']; ?></a></li>
+                <li class="active"><a
+                        href="<?php echo $pageInfo['nav'][1]['url']; ?>"><?php echo $pageInfo['nav'][1]['title']; ?></a>
+                </li>
+                <li><a href="<?php echo $pageInfo['nav'][1]['url']; ?>"><?php echo $pageInfo['nav'][1]['title']; ?></a>
+                </li>
+                <li><a href="<?php echo $pageInfo['nav'][2]['url']; ?>"><?php echo $pageInfo['nav'][2]['title']; ?></a>
+                </li>
+                <li><a href="<?php echo $pageInfo['nav'][3]['url']; ?>"><?php echo $pageInfo['nav'][3]['title']; ?></a>
+                </li>
+                <li><a href="<?php echo $pageInfo['nav'][4]['url']; ?>"><?php echo $pageInfo['nav'][4]['title']; ?></a>
+                </li>
+                <li><a href="<?php echo $pageInfo['nav'][5]['url']; ?>"><?php echo $pageInfo['nav'][5]['title']; ?></a>
+                </li>
+                <li><a href="<?php echo $pageInfo['nav'][6]['url']; ?>"><?php echo $pageInfo['nav'][6]['title']; ?></a>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right pull-right">
-                <li><a href="<?php echo $pageInfo['nav'][7]['url']; ?>"><?php echo $pageInfo['nav'][7]['title']; ?></a></li>
-                <li><a href="<?php echo $pageInfo['nav'][8]['url']; ?>"><?php echo $pageInfo['nav'][8]['title']; ?></a></li>
+                <li><a href="<?php echo $pageInfo['nav'][7]['url']; ?>"><?php echo $pageInfo['nav'][7]['title']; ?></a>
+                </li>
+                <li><a href="<?php echo $pageInfo['nav'][8]['url']; ?>"><?php echo $pageInfo['nav'][8]['title']; ?></a>
+                </li>
             </ul>
         </div>
     </div>
@@ -154,7 +168,7 @@ $maxUpdloadSize = 50000000;
         <div class="row">
             <div class="col-md-12">
                 <ul class="list-inline">
-                    <li><img src="./vendor/image/logo.png" alt="<?php echo $pageInfo['h1_title']; ?>" /></li>
+                    <li><img src="./vendor/image/logo.png" alt="<?php echo $pageInfo['h1_title']; ?>"/></li>
                     <li><h1><?php echo $pageInfo['h1_title']; ?></h1></li>
                 </ul>
             </div>
@@ -173,8 +187,8 @@ $maxUpdloadSize = 50000000;
                         'apikey' => $apiKey,
                     );
                     $url = 'https://www.virustotal.com/vtapi/v2/file/report';
-                    foreach($fields as $key=>$value) {
-                        $fields_string .= $key.'='.$value.'&';
+                    foreach ($fields as $key => $value) {
+                        $fields_string .= $key . '=' . $value . '&';
                     }
 
                     rtrim($fields_string, '&');
@@ -223,7 +237,7 @@ $maxUpdloadSize = 50000000;
                         echo '</table>';
                         unset($result['scans']);
                         ?>
-                        <hr />
+                        <hr/>
                         <table class="table table-striped table-bordered table-condensed">
                             <?php
                             foreach ($result as $key => $value) {
@@ -235,207 +249,254 @@ $maxUpdloadSize = 50000000;
                                 <?php
                             }
                             echo '</table>';
-                        break;
+                            break;
 
-                        default:
-                        case 'send':
+                            default:
+                            case 'send':
                             if (isset($_FILES["file"]["name"]) && !empty($_FILES["file"]["name"]) && isset($_POST["submit"])) {
-                                $mimeType = Tools::MimeType();
+                            $mimeType = Tools::MimeType();
 
-                                $fields = array(
-                                    'ip' => $_SERVER['REMOTE_ADDR'],
-                                    'first_name' => '',
-                                    'last_name' => '',
-                                    'email' => '',
-                                    'mobile' => '',
-                                    'file_name' => '',
-                                    'file_size' => '',
-                                    'file_hash' => '',
-                                    'file_status' => 1,
-                                    'time_request' => time(),
-                                    'time_result' => '',
-                                    'status' => '',
-                                    'code' => '',
-                                    'result' => '',
-                                );
+                            $fields = array(
+                                'ip' => $_SERVER['REMOTE_ADDR'],
+                                'first_name' => '',
+                                'last_name' => '',
+                                'email' => '',
+                                'mobile' => '',
+                                'file_name' => '',
+                                'file_size' => '',
+                                'file_hash' => '',
+                                'file_status' => 1,
+                                'time_request' => time(),
+                                'time_result' => '',
+                                'status' => '',
+                                'code' => '',
+                                'result' => '',
+                            );
 
-                                // Set
-                                $fields['first_name'] = $_POST['first_name'];
-                                $fields['last_name'] = $_POST['last_name'];
-                                $fields['email'] = $_POST['email'];
-                                $fields['mobile'] = $_POST['mobile'];
-                                $fields['file_name'] = $_FILES["file"]["name"];
-                                $fields['file_size'] = $_FILES["file"]["size"];
+                            // Set
+                            $fields['first_name'] = $_POST['first_name'];
+                            $fields['last_name'] = $_POST['last_name'];
+                            $fields['email'] = $_POST['email'];
+                            $fields['mobile'] = $_POST['mobile'];
+                            $fields['file_name'] = $_FILES["file"]["name"];
+                            $fields['file_size'] = $_FILES["file"]["size"];
 
-                                // Set file
-                                $target_file = $uploadDir . basename($_FILES["file"]["name"]);
-                                $uploadOk = 1;
-                                $fileType = pathinfo($target_file,PATHINFO_EXTENSION);
-                                // Check if file already exists
-                                if (file_exists($target_file)) {
-                                    echo "Sorry, file already exists.";
-                                    $uploadOk = 0;
+                            // Set file
+                            $target_file = $uploadDir . basename($_FILES["file"]["name"]);
+                            $uploadOk = 1;
+                            $fileType = pathinfo($target_file, PATHINFO_EXTENSION);
+                            // Check if file already exists
+                            if (file_exists($target_file)) {
+                                echo "Sorry, file already exists.";
+                                $uploadOk = 0;
+                            }
+                            // Check file size
+                            if ($_FILES["file"]["size"] > $maxUpdloadSize) {
+                                echo "Sorry, your file is too large.";
+                                $uploadOk = 0;
+                            }
+                            // Allow certain file formats
+                            if (!in_array($fileType, $mimeType)) {
+                                echo "Sorry, your file tpe is not allowed.";
+                                $uploadOk = 0;
+                            }
+                            // Check if $uploadOk is set to 0 by an error
+                            if ($uploadOk == 0) {
+                                echo "Sorry, your file was not uploaded.";
+                                // if everything is ok, try to upload file
+                            } else {
+                            if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+                            try {
+                            // PHP code for scanning files for viruses using virustotal.com API
+                            // File coded by Adrian at www.TheWebHelp.com
+                            header("Content-Type: text/plain");
+
+                            // get the file size in mb, we will use it to know at what url to send for scanning (it's a different URL for over 30MB)
+                            $file_size_mb = filesize($target_file) / 1024 / 1024;
+
+                            // calculate a hash of this file, we will use it as an unique ID when quering about this file
+                            $fields['file_hash'] = $file_hash = hash('sha256', file_get_contents($target_file));
+
+                            // [PART 1] hecking if a report for this file already exists (check by providing the file hash (md5/sha1/sha256)
+                            // or by providing a scan_id that you receive when posting a new file for scanning
+                            // !!! NOTE that scan_id is the only one that indicates file is queued/pending, the others will only report once scan is completed !!!
+                            $report_url = 'https://www.virustotal.com/vtapi/v2/file/report?apikey=' . $apiKey . "&resource=" . $file_hash;
+
+                            $api_reply = file_get_contents($report_url);
+
+                            // convert the json reply to an array of variables
+                            $api_reply_array = json_decode($api_reply, true);
+
+                            // your resource is queued for analysis
+                            if ($api_reply_array['response_code'] == -2) {
+                                echo $api_reply_array['verbose_msg'];
+                            }
+
+                            // reply is OK (it contains an antivirus report)
+                            // use the variables from $api_reply_array to process the antivirus data
+                            if ($api_reply_array['response_code'] == 1){
+                            $fields['result'] = json_encode($api_reply_array);
+                            // Save information
+                            Database::InsertLog($fields);
+                            // remove file
+                            unlink($target_file);
+                            /* echo "\nWe got an antivirus report, there were ".$api_reply_array['positives']." positives found. Here is the full data: \n\n";
+                            echo '<pre>';
+                            print_r($api_reply_array);
+                            echo '</pre>'; */
+
+
+                            ?>
+                            <h2>نتیجه اسکن فایل</h2>
+                            <table class="table table-striped table-bordered table-condensed">
+                                <tr>
+                                    <th>نام آنتی ویروس</th>
+                                    <th>دیتکت</th>
+                                    <th>نتیجه</th>
+                                    <th>نسخه</th>
+                                    <th>به روز رسانی</th>
+                                </tr>
+                                <?php
+                                foreach ($api_reply_array['scans'] as $key => $value) {
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $key; ?></td>
+                                        <td><?php if ($value['detected']) {
+                                                echo 'فایل آلوده است';
+                                            } else {
+                                                echo 'فایل پاک است';
+                                            } ?></td>
+                                        <td><?php echo $value['result']; ?></td>
+                                        <td><?php echo $value['version']; ?></td>
+                                        <td><?php echo $value['update']; ?></td>
+                                    </tr>
+                                    <?php
                                 }
-                                // Check file size
-                                if ($_FILES["file"]["size"] > $maxUpdloadSize) {
-                                    echo "Sorry, your file is too large.";
-                                    $uploadOk = 0;
-                                }
-                                // Allow certain file formats
-                                if(!in_array($fileType, $mimeType)) {
-                                    echo "Sorry, your file tpe is not allowed.";
-                                    $uploadOk = 0;
-                                }
-                                // Check if $uploadOk is set to 0 by an error
-                                if ($uploadOk == 0) {
-                                    echo "Sorry, your file was not uploaded.";
-                                    // if everything is ok, try to upload file
-                                } else {
-                                    if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
-                                        try {
-                                            // PHP code for scanning files for viruses using virustotal.com API
-                                            // File coded by Adrian at www.TheWebHelp.com
-                                            header("Content-Type: text/plain");
+                                echo '</table>';
+                                unset($api_reply_array['scans']);
+                                ?>
+                                <hr/>
+                                <table class="table table-striped table-bordered table-condensed">
+                                    <?php
+                                    foreach ($api_reply_array as $key => $value) {
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $key; ?></td>
+                                            <td><?php echo $value; ?></td>
+                                        </tr>
+                                        <?php
+                                    }
+                                    echo '</table>';
+                                    exit;
+                                    }
 
-                                            // get the file size in mb, we will use it to know at what url to send for scanning (it's a different URL for over 30MB)
-                                            $file_size_mb = filesize($target_file)/1024/1024;
+                                    // [PART 2] a report for this file was not found, upload file for scanning
+                                    if ($api_reply_array['response_code'] == '0') {
 
-                                            // calculate a hash of this file, we will use it as an unique ID when quering about this file
-                                            $fields['file_hash'] = $file_hash = hash('sha256', file_get_contents($target_file));
+                                        // default url where to post files
+                                        $post_url = 'https://www.virustotal.com/vtapi/v2/file/scan';
 
-                                            // [PART 1] hecking if a report for this file already exists (check by providing the file hash (md5/sha1/sha256)
-                                            // or by providing a scan_id that you receive when posting a new file for scanning
-                                            // !!! NOTE that scan_id is the only one that indicates file is queued/pending, the others will only report once scan is completed !!!
-                                            $report_url = 'https://www.virustotal.com/vtapi/v2/file/report?apikey='.$apiKey."&resource=".$file_hash;
-
-                                            $api_reply = file_get_contents($report_url);
-
-                                            // convert the json reply to an array of variables
+                                        // get a special URL for uploading files larger than 32MB (up to 200MB)
+                                        if ($file_size_mb >= 32) {
+                                            $api_reply = @file_get_contents('https://www.virustotal.com/vtapi/v2/file/scan/upload_url?apikey=' . $apiKey);
                                             $api_reply_array = json_decode($api_reply, true);
-
-                                            // your resource is queued for analysis
-                                            if($api_reply_array['response_code']==-2){
-                                                echo $api_reply_array['verbose_msg'];
+                                            if (isset($api_reply_array['upload_url']) and $api_reply_array['upload_url'] != '') {
+                                                $post_url = $api_reply_array['upload_url'];
                                             }
-
-                                            // reply is OK (it contains an antivirus report)
-                                            // use the variables from $api_reply_array to process the antivirus data
-                                            if($api_reply_array['response_code']==1){
-                                                $fields['result'] = json_encode($api_reply_array);
-                                                // Save information
-                                                Database::InsertLog($fields);
-
-                                                echo "\nWe got an antivirus report, there were ".$api_reply_array['positives']." positives found. Here is the full data: \n\n";
-                                                echo '<pre>';
-                                                print_r($api_reply_array);
-                                                echo '</pre>';
-                                                exit;
-                                            }
-
-                                            // [PART 2] a report for this file was not found, upload file for scanning
-                                            if($api_reply_array['response_code']=='0'){
-
-                                                // default url where to post files
-                                                $post_url = 'https://www.virustotal.com/vtapi/v2/file/scan';
-
-                                                // get a special URL for uploading files larger than 32MB (up to 200MB)
-                                                if($file_size_mb >= 32){
-                                                    $api_reply = @file_get_contents('https://www.virustotal.com/vtapi/v2/file/scan/upload_url?apikey='.$apiKey);
-                                                    $api_reply_array = json_decode($api_reply, true);
-                                                    if(isset($api_reply_array['upload_url']) and $api_reply_array['upload_url']!=''){
-                                                        $post_url = $api_reply_array['upload_url'];
-                                                    }
-                                                }
-
-                                                // send a file for checking
-
-                                                // curl will accept an array here too:
-                                                $post['apikey'] = $apiKey;
-                                                $post['file'] = '@'.$target_file;
-
-                                                $ch = curl_init();
-                                                curl_setopt($ch, CURLOPT_URL,$post_url);
-                                                curl_setopt($ch, CURLOPT_POST,1);
-                                                curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-                                                curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-                                                $api_reply = curl_exec ($ch);
-                                                curl_close ($ch);
-
-                                                $api_reply_array = json_decode($api_reply, true);
-
-                                                if($api_reply_array['response_code']==1){
-                                                    //echo "\nfile queued OK, you can use this scan_id to check the scan progress:\n".$api_reply_array['scan_id'];
-                                                    //echo "\nor just keep checking using the file hash, but it will only report once it is completed (no 'PENDING/QUEUED' reply will be given).";
-                                                    $fields['code'] = $api_reply_array['scan_id'];
-                                                    echo 'Please check on this link to see result : <a href="http://netswebs.com/antivirus/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '">http://netswebs.com/antivirus/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '</a>';
-                                                }
-                                            }
-                                            // Save information
-                                            Database::InsertLog($fields);
-                                        } catch (Exception $e) {
-                                            // Show error
-                                            echo '<pre>';
-                                            print_r(strip_tags($e->getMessage()));
-                                            echo '</pre>';
                                         }
-                                        // remove file
-                                        unlink($target_file);
+
+                                        // send a file for checking
+
+                                        // curl will accept an array here too:
+                                        $post['apikey'] = $apiKey;
+                                        $post['file'] = '@' . $target_file;
+
+                                        $ch = curl_init();
+                                        curl_setopt($ch, CURLOPT_URL, $post_url);
+                                        curl_setopt($ch, CURLOPT_POST, 1);
+                                        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+                                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                                        $api_reply = curl_exec($ch);
+                                        curl_close($ch);
+
+                                        $api_reply_array = json_decode($api_reply, true);
+
+                                        if ($api_reply_array['response_code'] == 1) {
+                                            //echo "\nfile queued OK, you can use this scan_id to check the scan progress:\n".$api_reply_array['scan_id'];
+                                            //echo "\nor just keep checking using the file hash, but it will only report once it is completed (no 'PENDING/QUEUED' reply will be given).";
+                                            $fields['code'] = $api_reply_array['scan_id'];
+                                            echo '<h2>نتیجه اسکن فایل</h2>';
+                                            echo '<p>لطفا لینک زیربرای مشاهده نتیجه بررسی بفرمایید، ممکن است نتیجه اسکن نهایی حداکثر بعد از ۱ ساعت از زمان ارسال درخواست آماده شده و قابل مشاهده باشد. در صورتی که نتیجه کامل را مشاهده نکردید لطفا بعد از ۱ ساعت مجددا تلاش نمایید</p>';
+                                            echo '<p><a href="http://netswebs.com/antivirus/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '">http://netswebs.com/antivirus/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '</a></p>';
+                                        }
+                                    }
+                                    // Save information
+                                    Database::InsertLog($fields);
+                                    } catch (Exception $e) {
+                                        // Show error
+                                        echo '<pre>';
+                                        print_r(strip_tags($e->getMessage()));
+                                        echo '</pre>';
+                                    }
+                                    // remove file
+                                    unlink($target_file);
                                     } else {
                                         echo "Sorry, there was an error uploading your file.";
                                     }
-                                }
-                            } else { ?>
-                                <form class="well" action="" method="post" enctype="multipart/form-data">
-                                    <div class="form-group clearfix" data-name="first_name">
-                                        <label class="col-md-3 control-label">نام</label>
-                                        <div class="col-md-7 js-form-element">
-                                            <input class="col-md-12" name="first_name" type="text" required>
-                                            <div class="text-muted"></div>
-                                        </div>
-                                        <div class="col-md-2 help-block"></div>
-                                    </div>
-                                    <div class="form-group clearfix" data-name="last_name">
-                                        <label class="col-md-3 control-label">نام خانوادگی</label>
-                                        <div class="col-md-7 js-form-element">
-                                            <input class="col-md-12" name="last_name" type="text" required>
-                                            <div class="text-muted"></div>
-                                        </div>
-                                        <div class="col-md-2 help-block"></div>
-                                    </div>
-                                    <div class="form-group clearfix" data-name="email">
-                                        <label class="col-md-3 control-label">آدرس ایمیل</label>
-                                        <div class="col-md-7 js-form-element">
-                                            <input class="col-md-12" name="email" type="email" required>
-                                            <div class="text-muted"></div>
-                                        </div>
-                                        <div class="col-md-2 help-block"></div>
-                                    </div>
-                                    <div class="form-group clearfix" data-name="mobile">
-                                        <label class="col-md-3 control-label">موبایل</label>
-                                        <div class="col-md-7 js-form-element">
-                                            <input class="col-md-12" name="mobile" type="text" required>
-                                            <div class="text-muted"></div>
-                                        </div>
-                                        <div class="col-md-2 help-block"></div>
-                                    </div>
-                                    <div class="form-group clearfix" data-name="file">
-                                        <label class="col-md-3 control-label">بارگذاری فایل</label>
-                                        <div class="col-md-7 js-form-element">
-                                            <input name="file" type="file">
-                                            <div class="text-muted"></div>
-                                        </div>
-                                        <div class="col-md-2 help-block"></div>
-                                        <br />
-                                    </div>
-                                    <div class="form-group clearfix">
-                                        <div class="col-md-offset-3 col-md-9">
-                                            <input type="submit" class="btn btn-primary" name="submit" value="بارگذاری فایل">
-                                        </div>
-                                    </div>
-                                </form>
-                            <?php }
-                            break;
-                        } ?>
+                                    }
+                                    } else { ?>
+                                        <form class="well" action="" method="post" enctype="multipart/form-data">
+                                            <div class="form-group clearfix" data-name="first_name">
+                                                <label class="col-md-3 control-label">نام</label>
+                                                <div class="col-md-7 js-form-element">
+                                                    <input class="col-md-12" name="first_name" type="text" required>
+                                                    <div class="text-muted"></div>
+                                                </div>
+                                                <div class="col-md-2 help-block"></div>
+                                            </div>
+                                            <div class="form-group clearfix" data-name="last_name">
+                                                <label class="col-md-3 control-label">نام خانوادگی</label>
+                                                <div class="col-md-7 js-form-element">
+                                                    <input class="col-md-12" name="last_name" type="text" required>
+                                                    <div class="text-muted"></div>
+                                                </div>
+                                                <div class="col-md-2 help-block"></div>
+                                            </div>
+                                            <div class="form-group clearfix" data-name="email">
+                                                <label class="col-md-3 control-label">آدرس ایمیل</label>
+                                                <div class="col-md-7 js-form-element">
+                                                    <input class="col-md-12" name="email" type="email" required>
+                                                    <div class="text-muted"></div>
+                                                </div>
+                                                <div class="col-md-2 help-block"></div>
+                                            </div>
+                                            <div class="form-group clearfix" data-name="mobile">
+                                                <label class="col-md-3 control-label">موبایل</label>
+                                                <div class="col-md-7 js-form-element">
+                                                    <input class="col-md-12" name="mobile" type="text" required>
+                                                    <div class="text-muted"></div>
+                                                </div>
+                                                <div class="col-md-2 help-block"></div>
+                                            </div>
+                                            <div class="form-group clearfix" data-name="file">
+                                                <label class="col-md-3 control-label">بارگذاری فایل</label>
+                                                <div class="col-md-7 js-form-element">
+                                                    <input name="file" type="file">
+                                                    <div class="text-muted"></div>
+                                                </div>
+                                                <div class="col-md-2 help-block"></div>
+                                                <br/>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <input type="submit" class="btn btn-primary" name="submit"
+                                                           value="بارگذاری فایل">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    <?php }
+                                    break;
+                                    } ?>
                 </div>
             </div>
         </div>
