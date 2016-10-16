@@ -209,7 +209,24 @@ $maxUpdloadSize = 50000000;
                             //print_r($result);
                             //echo '</pre>';
                             ?>
+
                             <h2>نتیجه اسکن فایل</h2>
+                            <?php if (isset($result['scans']) && !empty($result['scans'])) { ?>
+                            <?php
+                            $countSuccess = 0 ;
+                            $countDanger = 0 ;
+                            $count = 0 ;
+                            foreach ($result['scans'] as $key => $value) {
+                                $count++;
+                                if ($value['detected']) {
+                                    $countDanger++;
+                                } else {
+                                    $countSuccess++;
+                                }
+                            }
+                            $class = ($countDanger > 0) ? 'alert-danger' : 'alert-success';
+                            ?>
+                            <div class="alert <?php echo $class; ?>" role="alert">فایل ارسالی شما مجموعا توسط <?php echo $count; ?> آنتی ویروس بررسی شد ، از این تعداد <?php echo $countSuccess; ?> مورد فایل شما را سالم و <?php echo $countDanger; ?> مورد فایل شما را آلوده تشخیص داده اند</div>
                             <div class="row">
                                 <?php foreach ($result['scans'] as $key => $value) { ?>
                                     <div class="col-md-2">
@@ -223,9 +240,9 @@ $maxUpdloadSize = 50000000;
                                             <div class="caption">
                                                 <h4 class="small"><?php echo $key; ?></h4>
                                                 <?php if ($value['detected']) { ?>
-                                                    <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i></div>
+                                                    <div class="text-danger"><i class="fa fa-times fa-3x" aria-hidden="true"></i></div>
                                                 <?php } else { ?>
-                                                    <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i></div>
+                                                    <div class="text-success"><i class="fa fa-check fa-3x" aria-hidden="true"></i></div>
                                                 <?php } ?>
                                                 <div><?php echo $value['result']; ?></div>
                                             </div>
@@ -233,6 +250,9 @@ $maxUpdloadSize = 50000000;
                                     </div>
                                 <?php } ?>
                             </div>
+                        <?php } else { ?>
+                            <div class="alert alert-warning" role="alert">هنوز جواب اسکن فایل شما آماده نشده است ، لطفا چند دقیقه دیگر تلاشش نمایید</div>
+                        <?php } ?>
                             <?php
                             break;
 
@@ -332,7 +352,22 @@ $maxUpdloadSize = 50000000;
 
 
                                                 ?>
+                                                <?php
+                                                $countSuccess = 0 ;
+                                                $countDanger = 0 ;
+                                                $count = 0 ;
+                                                foreach ($result['scans'] as $key => $value) {
+                                                    $count++;
+                                                    if ($value['detected']) {
+                                                        $countDanger++;
+                                                    } else {
+                                                        $countSuccess++;
+                                                    }
+                                                }
+                                                $class = ($countDanger > 0) ? 'alert-danger' : 'alert-success';
+                                                ?>
                                                 <h2>نتیجه اسکن فایل</h2>
+                                                <div class="alert <?php echo $class; ?>" role="alert">فایل ارسالی شما مجموعا توسط <?php echo $count; ?> آنتی ویروس بررسی شد ، از این تعداد <?php echo $countSuccess; ?> مورد فایل شما را سالم و <?php echo $countDanger; ?> مورد فایل شما را آلوده تشخیص داده اند</div>
                                                 <div class="row">
                                                     <?php foreach ($result['scans'] as $key => $value) { ?>
                                                         <div class="col-md-2">
@@ -346,9 +381,9 @@ $maxUpdloadSize = 50000000;
                                                                 <div class="caption">
                                                                     <h4 class="small"><?php echo $key; ?></h4>
                                                                     <?php if ($value['detected']) { ?>
-                                                                        <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i></div>
+                                                                        <div class="text-danger"><i class="fa fa-times fa-3x" aria-hidden="true"></i></div>
                                                                     <?php } else { ?>
-                                                                        <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i></div>
+                                                                        <div class="text-success"><i class="fa fa-check fa-3x" aria-hidden="true"></i></div>
                                                                     <?php } ?>
                                                                     <div><?php echo $value['result']; ?></div>
                                                                 </div>
