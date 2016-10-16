@@ -109,6 +109,7 @@ $websiteUrl = 'http://www.netswebs.com';
     <link href="./vendor/font-awesome/css/font-awesome.min.css" media="screen" rel="stylesheet" type="text/css">
     <link href="./vendor/css/style.css" media="screen" rel="stylesheet" type="text/css">
     <link href="./vendor/css/locale.css" media="screen" rel="stylesheet" type="text/css">
+    <link href="./css/style.css" media="screen" rel="stylesheet" type="text/css">
 
     <link href="./vendor/image/touch-icon-iphone.png" rel="apple-touch-icon">
     <link href="./vendor/image/touch-icon-ipad.png" rel="apple-touch-icon">
