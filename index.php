@@ -221,7 +221,15 @@ $maxUpdloadSize = 50000000;
                         foreach ($result['scans'] as $key => $value) {
                             ?>
                             <tr>
-                                <td><?php echo $key; ?></td>
+                                <td>
+                                    <?php
+                                    $file = dirname(__FILE__) . '/image/logo/' . $key . '.png';
+                                    if (file_exists($file)) {
+                                        echo '<img src="./image/logo/' . $key . '.png" alt="' . $key . '" class="img-responsive">';
+                                    } else {
+                                        echo $key;
+                                    } ?>
+                                </td>
                                 <td><?php echo $value['version']; ?></td>
                                 <td class="text-center">
                                     <?php if ($value['detected']) { ?>
@@ -360,7 +368,15 @@ $maxUpdloadSize = 50000000;
                                 foreach ($api_reply_array['scans'] as $key => $value) {
                                     ?>
                                     <tr>
-                                        <td><?php echo $key; ?></td>
+                                        <td>
+                                            <?php
+                                            $file = dirname(__FILE__) . '/image/logo/' . $key . '.png';
+                                            if (file_exists($file)) {
+                                                echo '<img src="./image/logo/' . $key . '.png" alt="' . $key . '" class="img-responsive">';
+                                            } else {
+                                                echo $key;
+                                            } ?>
+                                        </td>
                                         <td><?php echo $value['version']; ?></td>
                                         <td class="text-center">
                                             <?php if ($value['detected']) { ?>
