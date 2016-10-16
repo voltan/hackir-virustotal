@@ -72,6 +72,7 @@ $pageInfo = array(
 $apiKey = '19f2ab7ca76132a33559efbcca6c20d170520e4685ccd27e624a5a1f7dd596d2';
 $uploadDir = "/home/nanoin/public_html/antivirus/upload/";
 $maxUpdloadSize = 50000000;
+$websiteUrl = 'http://www.netswebs.com';
 ?>
 <!DOCTYPE HTML>
 <html lang="fa">
@@ -251,7 +252,11 @@ $maxUpdloadSize = 50000000;
                                 <?php } ?>
                             </div>
                         <?php } else { ?>
+                            <div class="text-center">
+                                <img src="./image/pending.png">
+                            </div>
                             <div class="alert alert-warning" role="alert">هنوز جواب اسکن فایل شما آماده نشده است ، لطفا چند دقیقه دیگر تلاشش نمایید</div>
+                            <?php echo '<p><a href="' . $websiteUrl . '/antivirus/index.php?type=result&scan_id=' . Tools::CleanVars($_GET, 'scan_id', '', 'string') . '">' . $websiteUrl . '/antivirus/index.php?type=result&scan_id=' . Tools::CleanVars($_GET, 'scan_id', '', 'string') . '</a></p>'; ?>
                         <?php } ?>
                             <?php
                             break;
@@ -432,7 +437,7 @@ $maxUpdloadSize = 50000000;
                                                     $fields['code'] = $api_reply_array['scan_id'];
                                                     echo '<h2>نتیجه اسکن فایل</h2>';
                                                     echo '<p>لطفا لینک زیربرای مشاهده نتیجه بررسی بفرمایید، ممکن است نتیجه اسکن نهایی حداکثر بعد از ۱ ساعت از زمان ارسال درخواست آماده شده و قابل مشاهده باشد. در صورتی که نتیجه کامل را مشاهده نکردید لطفا بعد از ۱ ساعت مجددا تلاش نمایید</p>';
-                                                    echo '<p><a href="http://netswebs.com/antivirus/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '">http://netswebs.com/antivirus/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '</a></p>';
+                                                    echo '<p><a href="' . $websiteUrl . '/antivirus/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '">' . $websiteUrl . '/antivirus/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '</a></p>';
                                                 }
                                             }
                                             // Save information
