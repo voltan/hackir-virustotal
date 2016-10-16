@@ -213,29 +213,30 @@ $maxUpdloadSize = 50000000;
                     <table class="table table-striped table-bordered table-condensed">
                         <tr>
                             <th>نام آنتی ویروس</th>
+                            <th>نسخه آنتی ویروس</th>
                             <th>دیتکت</th>
                             <th>نتیجه</th>
-                            <th>نسخه</th>
-                            <th>به روز رسانی</th>
                         </tr>
                         <?php
                         foreach ($result['scans'] as $key => $value) {
                             ?>
                             <tr>
                                 <td><?php echo $key; ?></td>
-                                <td><?php if ($value['detected']) {
-                                        echo 'فایل آلوده است';
-                                    } else {
-                                        echo 'فایل پاک است';
-                                    } ?></td>
-                                <td><?php echo $value['result']; ?></td>
                                 <td><?php echo $value['version']; ?></td>
-                                <td><?php echo $value['update']; ?></td>
+                                <td class="text-center">
+                                    <?php if ($value['detected']) { ?>
+                                        <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i></div>
+                                    <?php } else { ?>
+                                        <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i></div>
+                                    <?php } ?>
+                                </td>
+                                <td><?php echo $value['result']; ?></td>
+
                             </tr>
                             <?php
                         }
                         echo '</table>';
-                        unset($result['scans']);
+                        /* unset($result['scans']);
                         ?>
                         <hr/>
                         <table class="table table-striped table-bordered table-condensed">
@@ -248,7 +249,7 @@ $maxUpdloadSize = 50000000;
                                 </tr>
                                 <?php
                             }
-                            echo '</table>';
+                            echo '</table>'; */
                             break;
 
                             default:
@@ -351,28 +352,29 @@ $maxUpdloadSize = 50000000;
                             <table class="table table-striped table-bordered table-condensed">
                                 <tr>
                                     <th>نام آنتی ویروس</th>
+                                    <th>نسخه آنتی ویروس</th>
                                     <th>دیتکت</th>
                                     <th>نتیجه</th>
-                                    <th>نسخه</th>
-                                    <th>به روز رسانی</th>
                                 </tr>
                                 <?php
                                 foreach ($api_reply_array['scans'] as $key => $value) {
                                     ?>
                                     <tr>
                                         <td><?php echo $key; ?></td>
-                                        <td><?php if ($value['detected']) {
-                                                echo 'فایل آلوده است';
-                                            } else {
-                                                echo 'فایل پاک است';
-                                            } ?></td>
-                                        <td><?php echo $value['result']; ?></td>
                                         <td><?php echo $value['version']; ?></td>
-                                        <td><?php echo $value['update']; ?></td>
-                                    </tr>
+                                        <td class="text-center">
+                                            <?php if ($value['detected']) { ?>
+                                                <div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i></div>
+                                            <?php } else { ?>
+                                                <div class="text-success"><i class="fa fa-check" aria-hidden="true"></i></div>
+                                            <?php } ?>
+                                        </td>
+                                        <td><?php echo $value['result']; ?></td>
+                                     </tr>
                                     <?php
                                 }
                                 echo '</table>';
+                                /*
                                 unset($api_reply_array['scans']);
                                 ?>
                                 <hr/>
@@ -386,7 +388,7 @@ $maxUpdloadSize = 50000000;
                                         </tr>
                                         <?php
                                     }
-                                    echo '</table>';
+                                    echo '</table>'; */
                                     exit;
                                     }
 
