@@ -33,8 +33,8 @@ $pageInfo = array(
     'brand_url' => 'http://www.hack.ir',
     'nav' => array(
         '1' => array(
-            'title' => 'عنوان منو',
-            'url' => '#',
+            'title' => 'برگشت',
+            'url' => 'http://www.hack.ir',
         ),
         '2' => array(
             'title' => 'عنوان منو',
@@ -143,18 +143,6 @@ $websiteUrl = 'http://www.netswebs.com';
                 <li class="active"><a
                         href="<?php echo $pageInfo['nav'][1]['url']; ?>"><?php echo $pageInfo['nav'][1]['title']; ?></a>
                 </li>
-                <li><a href="<?php echo $pageInfo['nav'][1]['url']; ?>"><?php echo $pageInfo['nav'][1]['title']; ?></a>
-                </li>
-                <li><a href="<?php echo $pageInfo['nav'][2]['url']; ?>"><?php echo $pageInfo['nav'][2]['title']; ?></a>
-                </li>
-                <li><a href="<?php echo $pageInfo['nav'][3]['url']; ?>"><?php echo $pageInfo['nav'][3]['title']; ?></a>
-                </li>
-                <li><a href="<?php echo $pageInfo['nav'][4]['url']; ?>"><?php echo $pageInfo['nav'][4]['title']; ?></a>
-                </li>
-                <li><a href="<?php echo $pageInfo['nav'][5]['url']; ?>"><?php echo $pageInfo['nav'][5]['title']; ?></a>
-                </li>
-                <li><a href="<?php echo $pageInfo['nav'][6]['url']; ?>"><?php echo $pageInfo['nav'][6]['title']; ?></a>
-                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right pull-right">
                 <li><a href="<?php echo $pageInfo['nav'][7]['url']; ?>"><?php echo $pageInfo['nav'][7]['title']; ?></a>
@@ -257,7 +245,7 @@ $websiteUrl = 'http://www.netswebs.com';
                                 <img src="./image/pending.png">
                             </div>
                             <div class="alert alert-warning" role="alert">هنوز جواب اسکن فایل شما آماده نشده است ، لطفا چند دقیقه دیگر تلاشش نمایید</div>
-                            <?php echo '<p><a href="' . $websiteUrl . '/antivirus/index.php?type=result&scan_id=' . Tools::CleanVars($_GET, 'scan_id', '', 'string') . '">' . $websiteUrl . '/antivirus/index.php?type=result&scan_id=' . Tools::CleanVars($_GET, 'scan_id', '', 'string') . '</a></p>'; ?>
+                            <?php echo '<p><a href="' . $websiteUrl . '/index.php?type=result&scan_id=' . Tools::CleanVars($_GET, 'scan_id', '', 'string') . '">' . $websiteUrl . '/index.php?type=result&scan_id=' . Tools::CleanVars($_GET, 'scan_id', '', 'string') . '</a></p>'; ?>
                         <?php } ?>
                             <?php
                             break;
@@ -307,10 +295,10 @@ $websiteUrl = 'http://www.netswebs.com';
                                     $uploadOk = 0;
                                 }
                                 // Allow certain file formats
-                                if (!in_array($fileType, $mimeType)) {
+                                /* if (!in_array($fileType, $mimeType)) {
                                     echo "Sorry, your file tpe is not allowed.";
                                     $uploadOk = 0;
-                                }
+                                } */
                                 // Check if $uploadOk is set to 0 by an error
                                 if ($uploadOk == 0) {
                                     echo "Sorry, your file was not uploaded.";
@@ -338,6 +326,12 @@ $websiteUrl = 'http://www.netswebs.com';
                                             // convert the json reply to an array of variables
                                             $api_reply_array = json_decode($api_reply, true);
 
+                                            // debug
+                                            // echo '<p>1</p>';
+                                            // echo '<pre>';
+                                            // print_r($api_reply_array);
+                                            // echo '</pre>';
+
                                             // your resource is queued for analysis
                                             if ($api_reply_array['response_code'] == -2) {
                                                 echo $api_reply_array['verbose_msg'];
@@ -346,7 +340,7 @@ $websiteUrl = 'http://www.netswebs.com';
                                             // reply is OK (it contains an antivirus report)
                                             // use the variables from $api_reply_array to process the antivirus data
                                             if ($api_reply_array['response_code'] == 1){
-                                                $fields['result'] = json_encode($api_reply_array);
+                                                //$fields['result'] = json_encode($api_reply_array);
                                                 // Save information
                                                 Database::InsertLog($fields);
                                                 // remove file
@@ -371,6 +365,13 @@ $websiteUrl = 'http://www.netswebs.com';
                                                     }
                                                 }
                                                 $class = ($countDanger > 0) ? 'alert-danger' : 'alert-success';
+
+                                                // debug
+                                                // echo '<p>3</p>';
+                                                // echo '<pre>';
+                                                // print_r($result);
+                                                // echo '</pre>';
+
                                                 ?>
                                                 <h2>نتیجه اسکن فایل</h2>
                                                 <div class="alert <?php echo $class; ?>" role="alert">فایل ارسالی شما مجموعا توسط <?php echo $count; ?> آنتی ویروس بررسی شد ، از این تعداد <?php echo $countSuccess; ?> مورد فایل شما را سالم و <?php echo $countDanger; ?> مورد فایل شما را آلوده تشخیص داده اند</div>
@@ -427,10 +428,32 @@ $websiteUrl = 'http://www.netswebs.com';
                                                 curl_setopt($ch, CURLOPT_POST, 1);
                                                 curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
                                                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                                                //curl_setopt($ch, CURLOPT_SAFE_UPLOAD, false);
                                                 $api_reply = curl_exec($ch);
                                                 curl_close($ch);
 
+                                                /* $options = array(
+                                                    'http' => array(
+                                                        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                                                        'method'  => 'POST',
+                                                        'content' => http_build_query($post)
+                                                    )
+                                                );
+                                                $context  = stream_context_create($options);
+                                                $api_reply = file_get_contents($post_url, false, $context); */
+
+
+
                                                 $api_reply_array = json_decode($api_reply, true);
+
+                                                // debug
+                                                // echo '<p>2</p>';
+                                                // echo '<pre>';
+                                                // print_r($api_reply_array);
+                                                // echo '</pre>';
+                                                // echo '<pre>';
+                                                // print_r($post);
+                                                // echo '</pre>';
 
                                                 if ($api_reply_array['response_code'] == 1) {
                                                     //echo "\nfile queued OK, you can use this scan_id to check the scan progress:\n".$api_reply_array['scan_id'];
@@ -438,7 +461,7 @@ $websiteUrl = 'http://www.netswebs.com';
                                                     $fields['code'] = $api_reply_array['scan_id'];
                                                     echo '<h2>نتیجه اسکن فایل</h2>';
                                                     echo '<p>لطفا لینک زیربرای مشاهده نتیجه بررسی بفرمایید، ممکن است نتیجه اسکن نهایی حداکثر بعد از ۱ ساعت از زمان ارسال درخواست آماده شده و قابل مشاهده باشد. در صورتی که نتیجه کامل را مشاهده نکردید لطفا بعد از ۱ ساعت مجددا تلاش نمایید</p>';
-                                                    echo '<p><a href="' . $websiteUrl . '/antivirus/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '">' . $websiteUrl . '/antivirus/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '</a></p>';
+                                                    echo '<p><a href="' . $websiteUrl . '/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '">' . $websiteUrl . '/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '</a></p>';
                                                 }
                                             }
                                             // Save information
