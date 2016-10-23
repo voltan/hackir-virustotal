@@ -195,9 +195,6 @@ $websiteUrl = 'http://www.netswebs.com';
                             curl_close($ch); */
                             $result = file_get_contents($url);
                             $result = json_decode($result, true);
-                            //echo '<pre>';
-                            //print_r($result);
-                            //echo '</pre>';
                             ?>
 
                             <h2>نتیجه اسکن فایل</h2>
@@ -356,7 +353,7 @@ $websiteUrl = 'http://www.netswebs.com';
                                                 $countSuccess = 0 ;
                                                 $countDanger = 0 ;
                                                 $count = 0 ;
-                                                foreach ($result['scans'] as $key => $value) {
+                                                foreach ($api_reply_array['scans'] as $key => $value) {
                                                     $count++;
                                                     if ($value['detected']) {
                                                         $countDanger++;
@@ -369,14 +366,14 @@ $websiteUrl = 'http://www.netswebs.com';
                                                 // debug
                                                 // echo '<p>3</p>';
                                                 // echo '<pre>';
-                                                // print_r($result);
+                                                // print_r($api_reply_array);
                                                 // echo '</pre>';
 
                                                 ?>
                                                 <h2>نتیجه اسکن فایل</h2>
                                                 <div class="alert <?php echo $class; ?>" role="alert">فایل ارسالی شما مجموعا توسط <?php echo $count; ?> آنتی ویروس بررسی شد ، از این تعداد <?php echo $countSuccess; ?> مورد فایل شما را سالم و <?php echo $countDanger; ?> مورد فایل شما را آلوده تشخیص داده اند</div>
                                                 <div class="row">
-                                                    <?php foreach ($result['scans'] as $key => $value) { ?>
+                                                    <?php foreach ($api_reply_array['scans'] as $key => $value) { ?>
                                                         <div class="col-md-2">
                                                             <div class="thumbnail text-center">
                                                                 <?php $file = dirname(__FILE__) . '/image/logo/' . $key . '.png';
