@@ -70,9 +70,9 @@ $pageInfo = array(
 
 // Setting
 $apiKey = '19f2ab7ca76132a33559efbcca6c20d170520e4685ccd27e624a5a1f7dd596d2';
-$uploadDir = "/home/nanoin/public_html/antivirus/upload/";
+$uploadDir = "/home/avhackir/domains/av.hack.ir/public_html/upload/";
 $maxUpdloadSize = 50000000;
-$websiteUrl = 'http://www.netswebs.com';
+$websiteUrl = 'http://av.hack.ir';
 ?>
 <!DOCTYPE HTML>
 <html lang="fa">
@@ -239,7 +239,7 @@ $websiteUrl = 'http://www.netswebs.com';
                                                 <?php } ?>
                                                 <div class="clearfix">
                                                     <?php if (!empty($value['result'])) { ?>
-                                                        <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="<?php echo $value['result']; ?>">
+                                                        <button type="button" class="btn btn-danger btn-xs" data-container="body" data-toggle="popover" data-placement="top" data-content="<?php echo $value['result']; ?>">
                                                             <span>نمایش اطلاعات</span>
                                                         </button>
                                                     <?php } ?>
@@ -403,7 +403,7 @@ $websiteUrl = 'http://www.netswebs.com';
                                                                     <?php } ?>
                                                                     <div class="clearfix">
                                                                         <?php if (!empty($value['result'])) { ?>
-                                                                        <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="<?php echo $value['result']; ?>">
+                                                                        <button type="button" class="btn btn-danger btn-xs" data-container="body" data-toggle="popover" data-placement="top" data-content="<?php echo $value['result']; ?>">
                                                                             <span>نمایش اطلاعات</span>
                                                                         </button>
                                                                         <?php } ?>
