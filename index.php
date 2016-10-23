@@ -126,6 +126,12 @@ $websiteUrl = 'http://www.netswebs.com';
     <!--[if lt IE 9]>
     <script type="text/javascript" src="./vendor/js/respond.min.js"></script><![endif]-->
 
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+    </script>
+
 </head>
 <body id="template-body" class="template-body-content template-locale-fa">
 <nav class="template-navbar navbar navbar-inverse">
@@ -231,7 +237,13 @@ $websiteUrl = 'http://www.netswebs.com';
                                                 <?php } else { ?>
                                                     <div class="text-success"><i class="fa fa-check fa-3x" aria-hidden="true"></i></div>
                                                 <?php } ?>
-                                                <div><?php echo $value['result']; ?></div>
+                                                <div class="clearfix">
+                                                    <?php if (!empty($value['result'])) { ?>
+                                                        <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="<?php echo $value['result']; ?>">
+                                                            <span>نمایش اطلاعات</span>
+                                                        </button>
+                                                    <?php } ?>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -389,7 +401,13 @@ $websiteUrl = 'http://www.netswebs.com';
                                                                     <?php } else { ?>
                                                                         <div class="text-success"><i class="fa fa-check fa-3x" aria-hidden="true"></i></div>
                                                                     <?php } ?>
-                                                                    <div><?php echo $value['result']; ?></div>
+                                                                    <div class="clearfix">
+                                                                        <?php if (!empty($value['result'])) { ?>
+                                                                        <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="<?php echo $value['result']; ?>">
+                                                                            <span>نمایش اطلاعات</span>
+                                                                        </button>
+                                                                        <?php } ?>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
