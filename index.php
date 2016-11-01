@@ -5,6 +5,12 @@ require_once 'autoloader.php';
 use Hack\Utility\Database;
 use Hack\Utility\Tools;
 
+// Setting
+$apiKey = '19f2ab7ca76132a33559efbcca6c20d170520e4685ccd27e624a5a1f7dd596d2';
+$uploadDir = "/home/avhackir/domains/av.hack.ir/public_html/upload/";
+$maxUpdloadSize = 50000000;
+$websiteUrl = 'http://av.hack.ir';
+
 $pageInfo = array(
     'title' => 'هک - امنیت اطلاعات - حریم خصوصی',
     'keywords' => 'هک - امنیت اطلاعات - حریم خصوصی',
@@ -67,12 +73,6 @@ $pageInfo = array(
     ),
     'h1_title' => 'هک - امنیت اطلاعات - حریم خصوصی',
 );
-
-// Setting
-$apiKey = '19f2ab7ca76132a33559efbcca6c20d170520e4685ccd27e624a5a1f7dd596d2';
-$uploadDir = "/home/avhackir/domains/av.hack.ir/public_html/upload/";
-$maxUpdloadSize = 50000000;
-$websiteUrl = 'http://av.hack.ir';
 ?>
 <!DOCTYPE HTML>
 <html lang="fa">
