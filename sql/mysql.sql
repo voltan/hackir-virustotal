@@ -12,9 +12,10 @@ CREATE TABLE `log` (
   `time_request` INT(10) UNSIGNED    NOT NULL DEFAULT '0',
   `time_result`  INT(10) UNSIGNED    NOT NULL DEFAULT '0',
   `status`       TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
-  `code`         VARCHAR(255)        NOT NULL DEFAULT '',
-  `result`       TEXT,
+  `code`         VARCHAR(255)        DEFAULT NULL,
+  `result`       MEDIUMTEXT,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`),
   KEY `status` (`status`),
   KEY `time_request` (`time_request`),
   KEY `time_result` (`time_result`)

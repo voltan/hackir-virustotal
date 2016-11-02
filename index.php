@@ -3,14 +3,15 @@
 require_once 'autoloader.php';
 
 use Hack\Utility\Database;
+use Hack\Utility\Mail;
 use Hack\Utility\Tools;
 
 // Setting
 $apiKey = '19f2ab7ca76132a33559efbcca6c20d170520e4685ccd27e624a5a1f7dd596d2';
 $uploadDir = "/home/avhackir/domains/av.hack.ir/public_html/upload/";
-$maxUpdloadSize = 50000000;
 $websiteUrl = 'http://av.hack.ir';
-
+$cronPassword = '136c9b5129793133609fc92b52e503c8';
+$maxUpdloadSize = 50000000;
 $pageInfo = array(
     'title' => 'هک - امنیت اطلاعات - حریم خصوصی',
     'keywords' => 'هک - امنیت اطلاعات - حریم خصوصی',
@@ -137,24 +138,18 @@ $pageInfo = array(
 <nav class="template-navbar navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#template-navbar-main" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#template-navbar-main" aria-expanded="false">
                 <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand"
-               href="<?php echo $pageInfo['brand_url']; ?>"><?php echo $pageInfo['brand_name']; ?></a>
+            <a class="navbar-brand" href="<?php echo $pageInfo['brand_url']; ?>"><?php echo $pageInfo['brand_name']; ?></a>
         </div>
         <div class="collapse navbar-collapse" id="template-navbar-main">
             <ul class="nav navbar-nav">
-                <li class="active"><a
-                        href="<?php echo $pageInfo['nav'][1]['url']; ?>"><?php echo $pageInfo['nav'][1]['title']; ?></a>
-                </li>
+                <li class="active"><a href="<?php echo $pageInfo['nav'][1]['url']; ?>"><?php echo $pageInfo['nav'][1]['title']; ?></a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right pull-right">
-                <li><a href="<?php echo $pageInfo['nav'][7]['url']; ?>"><?php echo $pageInfo['nav'][7]['title']; ?></a>
-                </li>
-                <li><a href="<?php echo $pageInfo['nav'][8]['url']; ?>"><?php echo $pageInfo['nav'][8]['title']; ?></a>
-                </li>
+                <li><a href="<?php echo $pageInfo['nav'][7]['url']; ?>"><?php echo $pageInfo['nav'][7]['title']; ?></a></li>
+                <li><a href="<?php echo $pageInfo['nav'][8]['url']; ?>"><?php echo $pageInfo['nav'][8]['title']; ?></a> </li>
             </ul>
         </div>
     </div>
@@ -177,35 +172,62 @@ $pageInfo = array(
             <div class="col-md-12">
                 <div class="template-section-content clearfix">
                     <?php switch ($_GET['type']) {
+                        case 'cron':
+                            if ($cronPassword == Tools::CleanVars($_GET, 'password', '', 'string')) {
+                                // remove all fiels from upload folder
+                                array_map('unlink', glob($uploadDir . "*"));
+                                // Select results from DB
+                                $logs = Database::SelectNotFinishedLog();
+                                foreach ($logs as $fields) {
+                                    // Set scan info and sedn to scan server
+                                    $scanFields = array(
+                                        'resource' => $fields['code'],
+                                        'apikey' => $apiKey,
+                                    );
+                                    $url = 'https://www.virustotal.com/vtapi/v2/file/report';
+                                    foreach ($scanFields as $key => $value) {
+                                        $fields_string .= $key . '=' . $value . '&';
+                                    }
+                                    rtrim($fields_string, '&');
+                                    $url = $url . '?' . $fields_string;
+                                    $result = file_get_contents($url);
+                                    $result = json_decode($result, true);
+                                    // Check
+                                    if (isset($result['scans']) && !empty($result['scans'])) {
+                                        // Update information
+                                        $fields['status'] = 1;
+                                        $fields['result'] = json_encode($result['scans']);
+                                        $fields['time_result'] = time();
+                                        $fields = Database::UpdateLog($fields);
+                                        // Send mail
+                                        Mail::send($fields);
+                                    }
+                                }
+                            } else {
+                                echo '<h2>Password not set</h2>';
+                            }
+                            break;
+
                         case 'result':
-                            $fields = array(
+                            // Set scan info and sedn to scan server
+                            $scanFields = array(
                                 'resource' => Tools::CleanVars($_GET, 'scan_id', '', 'string'),
                                 'apikey' => $apiKey,
                             );
                             $url = 'https://www.virustotal.com/vtapi/v2/file/report';
-                            foreach ($fields as $key => $value) {
+                            foreach ($scanFields as $key => $value) {
                                 $fields_string .= $key . '=' . $value . '&';
                             }
-
                             rtrim($fields_string, '&');
                             $url = $url . '?' . $fields_string;
-                            //echo $url;
-                            /* $ch = curl_init();
-                            curl_setopt($ch,CURLOPT_URL, $url);
-                            curl_setopt($ch,CURLOPT_POST, count($fields));
-                            curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                            $result = curl_exec($ch);
-                            $json = json_decode($result, true);
-                            print_r($json);
-                            curl_close($ch); */
                             $result = file_get_contents($url);
                             $result = json_decode($result, true);
                             ?>
-
                             <h2>نتیجه اسکن فایل</h2>
-                            <?php if (isset($result['scans']) && !empty($result['scans'])) { ?>
                             <?php
+                            // Check scan result
+                            if (isset($result['scans']) && !empty($result['scans'])) {
+                                // Show resutl
                             $countSuccess = 0 ;
                             $countDanger = 0 ;
                             $count = 0 ;
@@ -218,6 +240,14 @@ $pageInfo = array(
                                 }
                             }
                             $class = ($countDanger > 0) ? 'alert-danger' : 'alert-success';
+                            // Update information
+                            $fields['code'] = $scanFields['resource'];
+                            $fields['status'] = 1;
+                            $fields['result'] = json_encode($result['scans']);
+                            $fields['time_result'] = time();
+                            $fields = Database::UpdateLog($fields);
+                            // Send mail
+                            Mail::send($fields);
                             ?>
                             <div class="alert <?php echo $class; ?>" role="alert">فایل ارسالی شما مجموعا توسط <?php echo $count; ?> آنتی ویروس بررسی شد ، از این تعداد <?php echo $countSuccess; ?> مورد فایل شما را سالم و <?php echo $countDanger; ?> مورد فایل شما را آلوده تشخیص داده اند</div>
                             <div class="row">
@@ -262,6 +292,7 @@ $pageInfo = array(
                         default:
                         case 'send':
                             if (isset($_FILES["file"]["name"]) && !empty($_FILES["file"]["name"]) && isset($_POST["submit"])) {
+                                // Upload file for scan
                                 $mimeType = Tools::MimeType();
 
                                 $fields = array(
@@ -276,7 +307,7 @@ $pageInfo = array(
                                     'file_status' => 1,
                                     'time_request' => time(),
                                     'time_result' => '',
-                                    'status' => '',
+                                    'status' => 0,
                                     'code' => '',
                                     'result' => '',
                                 );
@@ -290,13 +321,13 @@ $pageInfo = array(
                                 $fields['file_size'] = $_FILES["file"]["size"];
 
                                 // Set file
-                                $target_file = $uploadDir . basename($_FILES["file"]["name"]);
                                 $uploadOk = 1;
+                                $target_file = $uploadDir . basename($_FILES["file"]["name"]);
                                 $fileType = pathinfo($target_file, PATHINFO_EXTENSION);
+                                $target_file = $uploadDir . md5(time() . rand(999, 9999)) . '.' . $fileType;
                                 // Check if file already exists
                                 if (file_exists($target_file)) {
-                                    echo "Sorry, file already exists.";
-                                    $uploadOk = 0;
+                                    unlink($target_file);
                                 }
                                 // Check file size
                                 if ($_FILES["file"]["size"] > $maxUpdloadSize) {
@@ -335,12 +366,6 @@ $pageInfo = array(
                                             // convert the json reply to an array of variables
                                             $api_reply_array = json_decode($api_reply, true);
 
-                                            // debug
-                                            // echo '<p>1</p>';
-                                            // echo '<pre>';
-                                            // print_r($api_reply_array);
-                                            // echo '</pre>';
-
                                             // your resource is queued for analysis
                                             if ($api_reply_array['response_code'] == -2) {
                                                 echo $api_reply_array['verbose_msg'];
@@ -349,19 +374,16 @@ $pageInfo = array(
                                             // reply is OK (it contains an antivirus report)
                                             // use the variables from $api_reply_array to process the antivirus data
                                             if ($api_reply_array['response_code'] == 1){
-                                                //$fields['result'] = json_encode($api_reply_array);
                                                 // Save information
+                                                $fields['status'] = 1;
+                                                $fields['result'] = json_encode($api_reply_array['scans']);
+                                                $fields['time_result'] = time();
                                                 Database::InsertLog($fields);
+                                                // Send mail
+                                                Mail::send($fields);
                                                 // remove file
                                                 unlink($target_file);
-                                                /* echo "\nWe got an antivirus report, there were ".$api_reply_array['positives']." positives found. Here is the full data: \n\n";
-                                                echo '<pre>';
-                                                print_r($api_reply_array);
-                                                echo '</pre>'; */
-
-
-                                                ?>
-                                                <?php
+                                                // Set resurl
                                                 $countSuccess = 0 ;
                                                 $countDanger = 0 ;
                                                 $count = 0 ;
@@ -374,13 +396,6 @@ $pageInfo = array(
                                                     }
                                                 }
                                                 $class = ($countDanger > 0) ? 'alert-danger' : 'alert-success';
-
-                                                // debug
-                                                // echo '<p>3</p>';
-                                                // echo '<pre>';
-                                                // print_r($api_reply_array);
-                                                // echo '</pre>';
-
                                                 ?>
                                                 <h2>نتیجه اسکن فایل</h2>
                                                 <div class="alert <?php echo $class; ?>" role="alert">فایل ارسالی شما مجموعا توسط <?php echo $count; ?> آنتی ویروس بررسی شد ، از این تعداد <?php echo $countSuccess; ?> مورد فایل شما را سالم و <?php echo $countDanger; ?> مورد فایل شما را آلوده تشخیص داده اند</div>
@@ -443,44 +458,27 @@ $pageInfo = array(
                                                 curl_setopt($ch, CURLOPT_POST, 1);
                                                 curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
                                                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                                                //curl_setopt($ch, CURLOPT_SAFE_UPLOAD, false);
                                                 $api_reply = curl_exec($ch);
                                                 curl_close($ch);
-
-                                                /* $options = array(
-                                                    'http' => array(
-                                                        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                                                        'method'  => 'POST',
-                                                        'content' => http_build_query($post)
-                                                    )
-                                                );
-                                                $context  = stream_context_create($options);
-                                                $api_reply = file_get_contents($post_url, false, $context); */
-
-
-
                                                 $api_reply_array = json_decode($api_reply, true);
 
-                                                // debug
-                                                // echo '<p>2</p>';
-                                                // echo '<pre>';
-                                                // print_r($api_reply_array);
-                                                // echo '</pre>';
-                                                // echo '<pre>';
-                                                // print_r($post);
-                                                // echo '</pre>';
 
                                                 if ($api_reply_array['response_code'] == 1) {
-                                                    //echo "\nfile queued OK, you can use this scan_id to check the scan progress:\n".$api_reply_array['scan_id'];
-                                                    //echo "\nor just keep checking using the file hash, but it will only report once it is completed (no 'PENDING/QUEUED' reply will be given).";
                                                     $fields['code'] = $api_reply_array['scan_id'];
                                                     echo '<h2>نتیجه اسکن فایل</h2>';
                                                     echo '<p>لطفا لینک زیربرای مشاهده نتیجه بررسی بفرمایید، ممکن است نتیجه اسکن نهایی حداکثر بعد از ۱ ساعت از زمان ارسال درخواست آماده شده و قابل مشاهده باشد. در صورتی که نتیجه کامل را مشاهده نکردید لطفا بعد از ۱ ساعت مجددا تلاش نمایید</p>';
                                                     echo '<p><a href="' . $websiteUrl . '/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '">' . $websiteUrl . '/index.php?type=result&scan_id=' . $api_reply_array['scan_id'] . '</a></p>';
+                                                    // Save information
+                                                    $fields['status'] = 0;
+                                                    Database::InsertLog($fields);
+                                                    // Send mail
+                                                    Mail::send($fields);
+                                                } else {
+                                                    echo '<h2>نتیجه اسکن فایل</h2>';
+                                                    echo '<p>خطا در اسکن</p>';
                                                 }
                                             }
-                                            // Save information
-                                            Database::InsertLog($fields);
+
                                         } catch (Exception $e) {
                                             // Show error
                                             echo '<pre>';

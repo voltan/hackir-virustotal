@@ -10,7 +10,7 @@ class Database
 
     public function Contact()
     {
-        $db = new PDO('mysql:host=localhost;dbname=nanoin_hack;charset=utf8', 'root', '}tXHe(}R4w^u');
+        $db = new PDO('mysql:host=localhost;dbname=avhackir_db;charset=utf8', 'avhackir_user', 'fVedukkGxf');
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         return $db;
@@ -77,6 +77,58 @@ class Database
             echo "An Error occured!";
             return $ex->getMessage();
         }
+    }
 
+    public function UpdateLog($fields)
+    {
+        // Check fields
+        foreach (array_keys($fields) as $key) {
+            if (!in_array($key, self::Columns())) {
+                unset($fields[$key]);
+            }
+        }
+
+        // Contact to db
+        $db = self::Contact();
+
+        // update
+        try {
+            $sql = "UPDATE log SET 
+                    result = :result,  
+                    time_result = :time_result,  
+                    status = :status  
+                    WHERE code = :code";
+            $update = $db->prepare($sql);
+            $update->bindParam(':result', $fields['result'], PDO::PARAM_STR);
+            $update->bindParam(':time_result', $fields['time_result'], PDO::PARAM_INT);
+            $update->bindParam(':status', $fields['status'], PDO::PARAM_INT);
+            $update->bindParam(':code', $fields['code'], PDO::PARAM_STR);
+            $update->execute();
+
+            $select = $db->prepare("SELECT * FROM log WHERE code = :code");
+            $select->bindParam(':code', $fields['code'], PDO::PARAM_STR);
+            $select->execute();
+            return $select->fetch(PDO::FETCH_BOTH);
+        } catch(PDOException $ex) {
+            echo "An Error occured!";
+            return $ex->getMessage();
+        }
+    }
+
+    public function SelectNotFinishedLog()
+    {
+        // Contact to db
+        $db = self::Contact();
+
+        // update
+        try {
+            $sql= "SELECT * FROM `log` WHERE status = 0 ORDER BY `log`.`id` DESC LIMIT 100 ";
+            $select = $db->prepare($sql);
+            $select->execute();
+            return $select->fetchAll();
+        } catch(PDOException $ex) {
+            echo "An Error occured!";
+            return $ex->getMessage();
+        }
     }
 }
