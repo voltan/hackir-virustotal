@@ -43,7 +43,6 @@ class Mail
         }
         $style = ($countDanger > 0) ? 'padding: 10px; background: #ff8a80; width: 700px;  border: 1px solid  #ff5252;' : 'padding: 10px; background: #ccff90; width: 700px; border: 1px solid  #b2ff59;';
 
-
         $message = '';
         $message .= '<html><head><title>نتیجه اسکن فایل توسط آنتی ویروس</title></head><body><table style="direction: rtl" width="700"><tr><td colspan="4" style="' . $style . '">فایل ارسالی شما مجموعا توسط ' . $count . '  آنتی ویروس بررسی شد ، از این تعداد  ' . $countSuccess . '   مورد فایل شما را سالم و ' . $countDanger . '  مورد فایل شما را آلوده تشخیص داده اند</td></tr>';
         foreach ($result as $key => $value) {
