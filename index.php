@@ -203,6 +203,7 @@ $pageInfo = array(
                                         Mail::send($fields);
                                     }
                                 }
+                                echo '<h2>Successful</h2>';
                             } else {
                                 echo '<h2>Password not set</h2>';
                             }
