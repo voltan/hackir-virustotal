@@ -10,7 +10,7 @@ use Hack\Utility\Tools;
 $apiKey = '19f2ab7ca76132a33559efbcca6c20d170520e4685ccd27e624a5a1f7dd596d2';
 $uploadDir = "/home/avhackir/domains/av.hack.ir/public_html/upload/";
 $websiteUrl = 'http://av.hack.ir';
-$cronPassword = '136c9b5129793133609fc92b52e503c8';
+//$cronPassword = '136c9b5129793133609fc92b52e503c8';
 $maxUpdloadSize = 50000000;
 $pageInfo = array(
     'title' => 'هک - امنیت اطلاعات - حریم خصوصی',
@@ -173,7 +173,7 @@ $pageInfo = array(
                 <div class="template-section-content clearfix">
                     <?php switch ($_GET['type']) {
                         case 'cron':
-                            if ($cronPassword == Tools::CleanVars($_GET, 'password', '', 'string')) {
+                            //if ($cronPassword == Tools::CleanVars($_GET, 'password', '', 'string')) {
                                 // remove all fiels from upload folder
                                 array_map('unlink', glob($uploadDir . "*"));
                                 // Select results from DB
@@ -204,9 +204,9 @@ $pageInfo = array(
                                     }
                                 }
                                 echo '<h2>Successful</h2>';
-                            } else {
-                                echo '<h2>Password not set</h2>';
-                            }
+                            //} else {
+                            //    echo '<h2>Password not set</h2>';
+                            //}
                             break;
 
                         case 'result':
